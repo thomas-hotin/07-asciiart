@@ -1,4 +1,7 @@
-#### Imports et définition des variables globales
+"""Module principal pour le codage ASCII art.
+Encode une chaîne de caractères sous forme de liste de tuples (caractère, nombre d'occurrences),
+en version itérative et récursive.
+"""
 
 # Mandatory for the recursive solution to work on large inputs
 import sys
@@ -9,45 +12,65 @@ sys.setrecursionlimit(2000)
 
 
 def artcode_i(s):
-    """retourne la liste de tuples encodant une chaîne de caractères passée en argument selon un algorithme itératif
+    """Encode une chaîne de caractères passée en argument selon un algorithme itératif.
 
     Args:
         s (str): la chaîne de caractères à encoder
 
     Returns:
-        list: la liste des tuples (caractère, nombre d'occurences)
+        list: la liste des tuples (caractère, nombre d'occurrences)
     """
-    
-    # votre code ici
+    if not s:  # chaîne vide
+        return []
 
-    return [ ]
+    # Initialisation
+    chars = [s[0]]   # liste des caractères rencontrés
+    counts = [1]     # occurrences correspondantes
+
+    # Parcours de la chaîne à partir du 2e caractère
+    for k in range(1, len(s)):
+        if s[k] == s[k - 1]:
+            counts[-1] += 1
+        else:
+            chars.append(s[k])
+            counts.append(1)
+
+    # Fusion des deux listes
+    return list(zip(chars, counts))
 
 
 def artcode_r(s):
-    """retourne la liste de tuples encodant une chaîne de caractères passée en argument selon un algorithme récursif
+    """Encode une chaîne de caractères passée en argument selon un algorithme récursif.
 
     Args:
         s (str): la chaîne de caractères à encoder
 
     Returns:
-        list: la liste des tuples (caractère, nombre d'occurences)
+        list: la liste des tuples (caractère, nombre d'occurrences)
     """
-    
-    # votre code ici
+    # cas de base : chaîne vide
+    if not s:
+        return []
 
-    # cas de base
-    # recherche nombre de caractères identiques au premier
-    # appel récursif
+    # recherche du nombre de caractères identiques au premier
+    first_char = s[0]
+    count = 1
+    while count < len(s) and s[count] == first_char:
+        count += 1
 
-    return []
-    
+    # appel récursif sur la sous-chaîne restante
+    return [(first_char, count)] + artcode_r(s[count:])
+
 
 #### Fonction principale
 
 
 def main():
-    print(artcode_i('MMMMaaacXolloMM'))
-    print(artcode_r('MMMMaaacXolloMM'))
+    """Teste les fonctions artcode_i et artcode_r sur un exemple."""
+    exemple = 'MMMMaaacXolloMM'
+    print(artcode_i(exemple))
+    print(artcode_r(exemple))
+
 
 if __name__ == "__main__":
     main()
